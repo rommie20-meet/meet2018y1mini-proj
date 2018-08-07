@@ -37,8 +37,8 @@ turtle.hideturtle()
 #for loop should use range() and count up to the number of pieces
 #in the snake (i.e. START_LENGTH)
 for i in range(START_LENGTH):
-    x_pos=snake.pos() #Get x-position with snake.pos()[0]
-    y_pos=snake.pos()
+    x_pos=snake.pos()[0] #Get x-position with snake.pos()[0]
+    y_pos=snake.pos()[1]
 
     #Add SQUARE_SIZE to x_pos. Where does x_pos point to now?    
     # You're RIGHT!
@@ -48,12 +48,12 @@ for i in range(START_LENGTH):
     snake.goto(x_pos,y_pos) #Move snake to new (x,y)
    
     #Append the new position tuple to pos_list
-    pos_list.append(x_pos,y_pos) 
+    pos_list.append((x_pos,y_pos)) 
 
     #Save the stamp ID! You'll need to erase it later. Then append
     # it to stamp_list.             
     snakestamp = snake.stamp()
-    snakestamp.append(stamp_list)
+    stamp_list.append(snakestamp)
 
 
 ###############################################################
@@ -85,19 +85,19 @@ def up():
 
 #2. Make functions down(), left(), and right() that change direction
 ####WRITE YOUR CODE HERE!!
-    def left():
+def left():
     global direction #snake direction is global (same everywhere)
     direction = LEFT #Change direction to up
     move_snake() #Update the snake drawing <- remember me later
     print("You pressed the left key!")
 
-    def down():
+def down():
     global direction #snake direction is global (same everywhere)
     direction = DOWN #Change direction to up
     move_snake() #Update the snake drawing <- remember me later
     print("You pressed the down key!")
 
-    def right():
+def right():
     global direction #snake direction is global (same everywhere)
     direction = RIGHT #Change direction to up
     move_snake() #Update the snake drawing <- remember me later
@@ -119,13 +119,20 @@ def move_snake():
     x_pos = my_pos[0]
     y_pos = my_pos[1]
     
-    if direction==RIGHT:
+    if direction == RIGHT:
         snake.goto(x_pos + SQUARE_SIZE, y_pos)
         print("You moved right!")
-    elif direction==LEFT:
+    elif direction == LEFT:
         snake.goto(x_pos - SQUARE_SIZE, y_pos)
         print("You moved left!")
-
+    elif direction == UP:
+        snake.goto(x_pos, y_pos + SQUARE_SIZE)
+        print("You moved up!")
+    elif direction  == DOWN:
+        snake.goto(x_pos, y_pos - SQUARE_SIZE)
+        print("You moved down!")
+        
+    
     #4. Write the conditions for UP and DOWN on your own
     ##### YOUR CODE HERE
 
