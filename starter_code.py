@@ -30,6 +30,12 @@ food_stamps = []
 snake = turtle.clone()
 snake.shape("square")
 
+turtle.register_shape("trash.gif")
+food = turtle.clone()
+food.shape("trash.gif") 
+
+
+
 #Hide the turtle object (it's an arrow - we don't need to see it)
 turtle.hideturtle()
 
@@ -81,7 +87,7 @@ direction = UP
 def up():
     global direction
     direction = UP 
-    move_snake()
+    
     print("You pressed the up key!")
 
 #2. Make functions down(), left(), and right() that change direction
@@ -89,19 +95,19 @@ def up():
 def left():
     global direction
     direction = LEFT
-    move_snake()
+    
     print("You pressed the left key!")
 
 def down():
     global direction
     direction = DOWN 
-    move_snake()
+    
     print("You pressed the down key!")
 
 def right():
     global direction
     direction = RIGHT 
-    move_snake()
+    
     print("You pressed the right key!")
     
 
@@ -115,6 +121,23 @@ turtle.onkeypress(right, RIGHT_ARROW)
 
 turtle.listen()
 
+def make_food():
+    #The screen positions go from -SIZE/2 to +SIZE/2
+    #But we need to make food pieces only appear on game squares
+    #So we cut up the game board into multiples of SQUARE_SIZE.
+    min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
+    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
+    min_y=-int(SIZE_Y/2/SQUARE_SIZE)-1
+    max_y=int(SIZE_Y/2/SQUARE_SIZE)+1
+    
+    #Pick a position that is a random multiple of SQUARE_SIZE
+    food_x = random.randint(min_x,max_x)*SQUARE_SIZE
+    food_y = random.randint(min_y,max_y)*SQUARE_SIZE
+    food.goto(food_x, food_y)
+    food_pos.append((food_x, food_y))
+    food_stamp = food.stamp()
+    food_stamps.append(food_stamp)
+    
 def move_snake():
     my_pos = snake.pos()
     x_pos = my_pos[0]
@@ -127,6 +150,11 @@ def move_snake():
     DOWN_EDGE = -250
     RIGHT_EDGE = 400
     LEFT_EDGE = -400
+    UP_EDGE = 250 
+
+    if my_pos in pos_list[:-1]:
+        quit()
+
     
     
 
@@ -169,11 +197,60 @@ def move_snake():
     new_stamp = snake.stamp()
     stamp_list.append(new_stamp)
     ######## SPECIAL PLACE - Remember it for Part 5
-    #pop zeroth element in pos_list to get rid of last the last 
+  
+   
+         #pop zeroth element in pos_list to get rid of last the last 
     #piece of the tail
-    old_stamp = stamp_list.pop(0)
-    snake.clearstamp(old_stamp)
-    pos_list.pop(0)
+    
+    global food_stamps, food_pos
+    #If snake is on top of food item
+    if snake.pos() in food_pos:
+        food_ind=food_pos.index(snake.pos()) #What does this do?
+        food.clearstamp(food_stamps[food_ind]) #Remove eaten food                 
+                                               #stamp
+        food_pos.pop(food_ind) #Remove eaten food position
+        food_stamps.pop(food_ind) #Remove eaten food stamp
+        print("You have eaten the food!")
+    else:
+        old_stamp = stamp_list.pop(0)
+        snake.clearstamp(old_stamp)
+        pos_list.pop(0)
+
+    
+    #HINT: This if statement may be useful for Part 8
+    if len(food_stamps) <= 6 :
+    	make_food()
+
+    
+    
+
+    turtle.ontimer(move_snake,TIME_STEP)
+
+
+
+    
+    
+
+
+        
+
+
+
+food_pos = [(100,100), (-100,100), (-100,-100), (100,-100)]
+food_stamps = []
+
+for i in food_pos:
+    food.goto(i)
+    food_stamp = food.stamp()
+    food_stamps.append(food_stamp)
+food.ht()
+    
+move_snake()
+
+snake.color('green')
+snake.shape('circle')
+
+
 
 
 
