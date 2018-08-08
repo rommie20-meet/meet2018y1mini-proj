@@ -77,30 +77,31 @@ RIGHT = 3
 
 direction = UP
 
+
 def up():
-    global direction #snake direction is global (same everywhere)
-    direction = UP #Change direction to up
-    move_snake() #Update the snake drawing <- remember me later
+    global direction
+    direction = UP 
+    move_snake()
     print("You pressed the up key!")
 
 #2. Make functions down(), left(), and right() that change direction
 ####WRITE YOUR CODE HERE!!
 def left():
-    global direction #snake direction is global (same everywhere)
-    direction = LEFT #Change direction to up
-    move_snake() #Update the snake drawing <- remember me later
+    global direction
+    direction = LEFT
+    move_snake()
     print("You pressed the left key!")
 
 def down():
-    global direction #snake direction is global (same everywhere)
-    direction = DOWN #Change direction to up
-    move_snake() #Update the snake drawing <- remember me later
+    global direction
+    direction = DOWN 
+    move_snake()
     print("You pressed the down key!")
 
 def right():
-    global direction #snake direction is global (same everywhere)
-    direction = RIGHT #Change direction to up
-    move_snake() #Update the snake drawing <- remember me later
+    global direction
+    direction = RIGHT 
+    move_snake()
     print("You pressed the right key!")
     
 
@@ -118,6 +119,30 @@ def move_snake():
     my_pos = snake.pos()
     x_pos = my_pos[0]
     y_pos = my_pos[1]
+    
+    new_pos = snake.pos()
+    new_x_pos = new_pos[0]
+    new_y_pos = new_pos[1]
+    
+    DOWN_EDGE = -250
+    RIGHT_EDGE = 400
+    LEFT_EDGE = -400
+    
+    
+
+    if new_x_pos >= RIGHT_EDGE:
+        print("You hit the right edge! Game over!")
+        quit()
+    elif new_x_pos <= LEFT_EDGE:
+        print('you hit the left edge! Game over!')
+        quit()
+    elif new_y_pos >= UP_EDGE:
+        print('you hit the left edge! Game over!')
+        quit()
+        
+    elif new_y_pos <= DOWN_EDGE:
+        print('you hit the down edge! Game over!')
+        quit()
     
     if direction == RIGHT:
         snake.goto(x_pos + SQUARE_SIZE, y_pos)
