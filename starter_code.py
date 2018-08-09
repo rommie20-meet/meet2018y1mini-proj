@@ -11,14 +11,44 @@ import random #We'll need this later in the lab
 
 turtle.tracer(1,0) #This helps the turtle move more smoothly
 
-SIZE_X=800
-SIZE_Y=500
+SIZE_X=1000
+SIZE_Y=1000
 turtle.setup(SIZE_X, SIZE_Y) #Curious? It's the turtle window  
                              #size. 
 turtle.penup()
 
 SQUARE_SIZE = 20
 START_LENGTH = 7
+
+
+
+scorev = 0
+
+def score(positionscore):
+    turtle.undo()
+    global scorev
+    turtle.goto(positionscore)
+    scorev += 1
+    turtle.hideturtle()
+    turtle.write(scorev, font=("Arial", 16, "normal"))
+
+
+border = turtle.clone()
+border.penup()
+border.goto(-250, 275)
+border.pendown()
+border.goto(250, 275)
+border.goto(250, -275)
+border.goto(-250, -275)
+border.goto(-250, 275)
+
+border.penup()
+border.goto(-75,300)
+border.pendown()
+border.write('SNAKE GAME!' ,font=('Arial', 18, "normal"))
+border.hideturtle()
+
+
 
 #Initialize lists
 pos_list = []
@@ -125,18 +155,20 @@ def make_food():
     #The screen positions go from -SIZE/2 to +SIZE/2
     #But we need to make food pieces only appear on game squares
     #So we cut up the game board into multiples of SQUARE_SIZE.
-    min_x=-int(SIZE_X/2/SQUARE_SIZE)+1
-    max_x=int(SIZE_X/2/SQUARE_SIZE)-1
-    min_y=-int(SIZE_Y/2/SQUARE_SIZE)-1
-    max_y=int(SIZE_Y/2/SQUARE_SIZE)+1
+    min_x=-int(250/2/SQUARE_SIZE)+1
+    max_x=int(250/2/SQUARE_SIZE)-1
+    min_y=-int(250/2/SQUARE_SIZE)-1
+    max_y=int(250/2/SQUARE_SIZE)+1
     
     #Pick a position that is a random multiple of SQUARE_SIZE
     food_x = random.randint(min_x,max_x)*SQUARE_SIZE
     food_y = random.randint(min_y,max_y)*SQUARE_SIZE
+    
     food.goto(food_x, food_y)
     food_pos.append((food_x, food_y))
     food_stamp = food.stamp()
     food_stamps.append(food_stamp)
+    
     
 def move_snake():
     my_pos = snake.pos()
@@ -147,10 +179,10 @@ def move_snake():
     new_x_pos = new_pos[0]
     new_y_pos = new_pos[1]
     
-    DOWN_EDGE = -250
-    RIGHT_EDGE = 400
-    LEFT_EDGE = -400
-    UP_EDGE = 250 
+    DOWN_EDGE = -275
+    RIGHT_EDGE = 250
+    LEFT_EDGE = -250
+    UP_EDGE = 275 
 
     if my_pos in pos_list[:-1]:
         quit()
@@ -196,6 +228,7 @@ def move_snake():
     pos_list.append(my_pos)
     new_stamp = snake.stamp()
     stamp_list.append(new_stamp)
+    
     ######## SPECIAL PLACE - Remember it for Part 5
   
    
@@ -207,11 +240,13 @@ def move_snake():
     if snake.pos() in food_pos:
         food_ind=food_pos.index(snake.pos()) #What does this do?
         food.clearstamp(food_stamps[food_ind]) #Remove eaten food                 
+        score((0,350))
                                                #stamp
         food_pos.pop(food_ind) #Remove eaten food position
         food_stamps.pop(food_ind) #Remove eaten food stamp
         print("You have eaten the food!")
     else:
+
         old_stamp = stamp_list.pop(0)
         snake.clearstamp(old_stamp)
         pos_list.pop(0)
@@ -221,6 +256,7 @@ def move_snake():
     if len(food_stamps) <= 6 :
     	make_food()
 
+    	
     
     
 
@@ -228,8 +264,6 @@ def move_snake():
 
 
 
-    
-    
 
 
         
@@ -246,9 +280,14 @@ for i in food_pos:
 food.ht()
     
 move_snake()
-
-snake.color('green')
 snake.shape('circle')
+snake.color('dark blue')
+
+
+
+
+
+
 
 
 
